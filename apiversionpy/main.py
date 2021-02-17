@@ -103,6 +103,27 @@ def main(docopt_argv):
                              pretty_print=True,
                              doctype=r'<?xml version="1.0" encoding="UTF-8"?>'))
         print('\n')
+    page_files = p.glob('**/*.page-meta.xml')
+    print(page_files)
+    print(type(page_files))
+    for vf in page_files:
+        print(vf)
+        tree = etree.parse(str(vf))
+        root = tree.getroot()
+        for element in root.iter(r'{*}apiVersion'):
+            print(element.tag)
+            print(element.text)
+            element.text = '51.0'
+            print('Modified \n')
+            print(element.tag)
+            print(element.text)
+        tree.write(str(vf),  encoding="UTF-8",
+                             pretty_print=True,
+                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>')
+        print(etree.tostring(tree, encoding="UTF-8",
+                             pretty_print=True,
+                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>'))
+        print('\n')
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='apiVersionpy 21.217.0.1')
