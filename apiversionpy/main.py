@@ -61,52 +61,16 @@ def main(docopt_argv):
     print('\n')
     print(docopt_argv['--path'])
     p = Path(docopt_argv['--path'])
-    cls_files = p.glob('**/*.cls-meta.xml')
-    print(cls_files)
-    print(type(cls_files))
-    for vf in cls_files:
-        print(vf)
-        tree = etree.parse(str(vf))
-        root = tree.getroot()
-        for element in root.iter(r'{*}apiVersion'):
-            print(element.tag)
-            print(element.text)
-            element.text = '51.0'
-            print('Modified \n')
-            print(element.tag)
-            print(element.text)
-        tree.write(str(vf),  encoding="UTF-8",
-                             pretty_print=True,
-                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>')
-        print(etree.tostring(tree, encoding="UTF-8",
-                             pretty_print=True,
-                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>'))
-        print('\n')
-    cmp_files = p.glob('**/*.cmp-meta.xml')
-    print(cmp_files)
-    print(type(cmp_files))
-    for vf in cmp_files:
-        print(vf)
-        tree = etree.parse(str(vf))
-        root = tree.getroot()
-        for element in root.iter(r'{*}apiVersion'):
-            print(element.tag)
-            print(element.text)
-            element.text = '51.0'
-            print('Modified \n')
-            print(element.tag)
-            print(element.text)
-        tree.write(str(vf),  encoding="UTF-8",
-                             pretty_print=True,
-                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>')
-        print(etree.tostring(tree, encoding="UTF-8",
-                             pretty_print=True,
-                             doctype=r'<?xml version="1.0" encoding="UTF-8"?>'))
-        print('\n')
-    page_files = p.glob('**/*.page-meta.xml')
-    print(page_files)
-    print(type(page_files))
-    for vf in page_files:
+    set_version(p, '**/*.cls-meta.xml')
+    set_version(p, '**/*.cmp-meta.xml')
+    set_version(p, '**/*.page-meta.xml')
+
+
+def set_version(_path=None, _glob_type=''):
+    version_files = _path.glob(_glob_type)
+    print(version_files)
+    print(type(version_files))
+    for vf in version_files:
         print(vf)
         tree = etree.parse(str(vf))
         root = tree.getroot()
@@ -125,7 +89,8 @@ def main(docopt_argv):
                              doctype=r'<?xml version="1.0" encoding="UTF-8"?>'))
         print('\n')
 
+
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='apiVersionpy 21.217.0.1')
+    arguments = docopt(__doc__, version='apiVersionpy 21.219.0.1')
     # print(arguments)
     main(arguments)
