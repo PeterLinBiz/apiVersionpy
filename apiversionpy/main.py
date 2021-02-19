@@ -61,9 +61,12 @@ def main(docopt_argv):
     print('\n')
     print(docopt_argv['--path'])
     p = Path(docopt_argv['--path'])
-    set_version(p, '**/*.cls-meta.xml')
     set_version(p, '**/*.cmp-meta.xml')
+    set_version(p, '**/*.cls-meta.xml')
+    set_version(p, '**/*.component-meta.xml')
+    set_version(p, '**/*.js-meta.xml')
     set_version(p, '**/*.page-meta.xml')
+    set_version(p, '**/*.trigger-meta.xml')
 
 
 def set_version(_path=None, _glob_type=''):
@@ -75,12 +78,13 @@ def set_version(_path=None, _glob_type=''):
         tree = etree.parse(str(vf))
         root = tree.getroot()
         for element in root.iter(r'{*}apiVersion'):
-            print(element.tag)
-            print(element.text)
-            element.text = '51.0'
-            print('Modified \n')
-            print(element.tag)
-            print(element.text)
+            if element.text != '51.0':
+                print(element.tag)
+                print(element.text)
+                element.text = '51.0'
+                print('Modified \n')
+                print(element.tag)
+                print(element.text)
         tree.write(str(vf),  encoding="UTF-8",
                              pretty_print=True,
                              doctype=r'<?xml version="1.0" encoding="UTF-8"?>')
